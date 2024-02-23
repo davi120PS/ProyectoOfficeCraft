@@ -34,7 +34,7 @@ const postPedido = (request, response) => {
     else{
         //console.log(action);return false;
         connection.query("UPDATE pedidos SET ClienteID=?, FechaPedido =?, Estado = ? WHERE PedidoID = ?", 
-        [id, cliente, fecha,estado],
+        [cliente, fecha,estado,id],
         (error, results) => {
             if(error)
                 throw error;

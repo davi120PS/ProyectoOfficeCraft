@@ -20,12 +20,12 @@ app.route("/clientes").get(getCliente);
 module.exports = app;
 
 /************Insertar o Actualizar clientes*/
-const postAlumno = (request, response) => {
-    const {action,id, nombre, correoElectronico, direccion} = request.body;
+const postCliente = (request, response) => {
+    const {action,id, nombre, correo, direccion} = request.body;
     //console.log(action);return false;
     if(action == "insert"){
-        connection.query("INSERT INTO clientes (Nombre, CorreoElectronico, Direccion) VALUES (?,?,?)", 
-        [nombre, correoElectronico, direccion],
+        connection.query("INSERT INTO clientes (Nombre, Correo, Direccion) VALUES (?,?,?)", 
+        [nombre, correo, direccion],
         (error, results) => {
             if(error)
                 throw error;
@@ -33,8 +33,8 @@ const postAlumno = (request, response) => {
         });
     }else{
         //console.log(action);return false;
-        connection.query("UPDATE clientes SET ClienteID = ?, Nombre = ?, CorreoElectronico = ? , Direccion = ?, WHERE ClienteID = ?", 
-        [nombre, correoElectronico, direccion],
+        connection.query("UPDATE clientes SET Nombre = ?, Correo = ? , Direccion = ? WHERE ClienteID = ?", 
+        [nombre, correo, direccion, id],
         (error, results) => {
             if(error)
                 throw error;
@@ -42,7 +42,7 @@ const postAlumno = (request, response) => {
         });
     }
 };
-app.route("/clientes").post(postAlumno);
+app.route("/clientes").post(postCliente);
 
 /************Eliminar clientes*/
 const delCliente = (request,response) => {
