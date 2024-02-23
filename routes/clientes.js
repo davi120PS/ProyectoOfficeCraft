@@ -25,7 +25,7 @@ const postAlumno = (request, response) => {
     //console.log(action);return false;
     if(action == "insert"){
         connection.query("INSERT INTO clientes (Nombre, CorreoElectronico, Direccion) VALUES (?,?,?)", 
-        [nombre, correoElectronico, direccion],
+        [nombre, CorreoElectronico, direccion],
         (error, results) => {
             if(error)
                 throw error;
@@ -34,7 +34,7 @@ const postAlumno = (request, response) => {
     }else{
         //console.log(action);return false;
         connection.query("UPDATE clientes SET ClienteID = ?, Nombre = ?, CorreoElectronico = ? , Direccion = ?, WHERE ClienteID = ?", 
-        [nombre, correoElectronico, direccion],
+        [nombre, correoElectronico, direccion,id],
         (error, results) => {
             if(error)
                 throw error;
