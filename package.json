@@ -1,0 +1,27 @@
+{
+  "name": "proyectoecommerce",
+  "version": "1.0.0",
+  "description": "papeleria",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davi120PS/ProyectoOfficeCraft.git"
+  },
+  "author": "David Peña Santos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davi120PS/ProyectoOfficeCraft/issues"
+  },
+  "homepage": "https://github.com/davi120PS/ProyectoOfficeCraft#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.4",
+    "nodemon": "^3.0.3"
+  }
+}
