@@ -6,6 +6,7 @@ app.use(express.urlencoded({extended: true}));
 
 //cargamos el archivo de rutas
 app.use(require('./routes/clientes'));
+app.use(require('./routes/pedidos'));
 
 const PORT = process.env.PORT;
 
