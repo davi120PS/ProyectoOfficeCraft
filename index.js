@@ -9,6 +9,8 @@ app.use(cors());
 //cargamos el archivo de rutas
 app.use(require('./routes/clientes'));
 app.use(require('./routes/pedidos'));
+app.use(require('./routes/detallespedido'));
+app.use(require('./routes/productos'));
 
 const PORT = process.env.PORT;
 
