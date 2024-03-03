@@ -16,4 +16,46 @@ const getProductos = (request,response) => {
 };
 //ruta
 app.route("/productos").get(getProductos);
+
+/*Metodo para crear o actualizar un cliente*/
+const postProducto = (request, response) => {
+    const {action,id,nombre,descripcion,precio,stock} = request.body;
+    //console.log(action);return false;
+    if(action == "insert"){
+        connection.query("INSERT INTO productos (Nombre, Descripcion, Precio, Stock) VALUES (?,?,?,?)", 
+        [nombre,descripcion,precio,stock],
+        (error, results) => {
+            if(error)
+                throw error;
+            response.status(201).json({"Producto añadido correctamente": results.affectedRows});
+        });
+    }
+//*En caso de añadir un ID existente al agregar se actualiza el pedido seleccionado*/
+    else{
+        //console.log(action);return false;
+        connection.query("UPDATE productos SET Nombre=?, Descripcion =?, Precio = ?, Stock = ? WHERE ProductoID = ?", 
+        [nombre, descripcion,precio,stock,id],
+        (error, results) => {
+            if(error)
+                throw error;
+            response.status(201).json({"Producto editado con exito": results.affectedRows});
+        });
+    }
+};
+app.route("/productos").post(postProducto);
+
+//Servicio para eliminar un cliente
+const delProducto = (request,response)=>{
+    const id = request.params.id;
+    //console.log(id); return false;
+    connection.query("DELETE FROM productos WHERE ProductoID = ?",
+    [id],
+    (error, results) => {
+        if(error)
+        throw error;
+    response.status(201).json({"Producto eliminado":results.affectedRows});
+    });
+};
+app.route("/productos/:id").delete(delProducto);
+
 module.exports = app;
