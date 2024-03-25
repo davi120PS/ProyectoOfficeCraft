@@ -21,7 +21,7 @@ module.exports = app;
 
 /************Insertar o Actualizar clientes*/
 const postCliente = (request, response) => {
-    const {action,id, nombre, correo, direccion} = request.body;
+    const {action,id, nombre, correo, direccion, ClienteID} = request.body;
     //console.log(action);return false;
     if(action == "insert"){
         connection.query("INSERT INTO clientes (Nombre, Correo, Direccion) VALUES (?,?,?)", 
@@ -33,7 +33,7 @@ const postCliente = (request, response) => {
         });
     }else{
         //console.log(action);return false;
-        connection.query("UPDATE clientes SET Nombre = ?, Correo = ? , Direccion = ? WHERE ClienteID = ?", 
+        connection.query("UPDATE clientes SET Nombre = ?, Correo = ? , Direccion = ? WHERE ClienteID = "+ClienteID+"", 
         [nombre, correo, direccion, id],
         (error, results) => {
             if(error)
@@ -43,6 +43,19 @@ const postCliente = (request, response) => {
     }
 };
 app.route("/clientes").post(postCliente);
+
+/************Editar clientes*/
+const getClienteId = (request,response) => {
+    const id = request.params.id;
+    connection.query("SELECT cl.*, cl.Nombre AS nombre, cl.Email AS email, cl.Direccion AS direccion FROM clientes cl WHERE ClienteID = ?",
+    [id],
+    (error,results)=>{
+        if(error)
+            throw error;
+        response.status(200).json(results);
+    });
+};
+app.route("/clientes/:id").get(getClienteId);
 
 /************Eliminar clientes*/
 const delCliente = (request,response) => {
