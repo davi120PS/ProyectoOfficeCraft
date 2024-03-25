@@ -21,7 +21,7 @@ module.exports = app;
 
 /************Insertar o Actualizar clientes*/
 const postCliente = (request, response) => {
-    const {action,id, nombre, correo, direccion} = request.body;
+    const {action,id, nombre, correo, direccion,ClienteID} = request.body;
     //console.log(action);return false;
     if(action == "insert"){
         connection.query("INSERT INTO clientes (Nombre, Correo, Direccion) VALUES (?,?,?)", 
@@ -33,7 +33,7 @@ const postCliente = (request, response) => {
         });
     }else{
         //console.log(action);return false;
-        connection.query("UPDATE clientes SET Nombre = ?, Correo = ? , Direccion = ? WHERE ClienteID = ?", 
+        connection.query("UPDATE clientes SET Nombre = ?, Correo = ? , Direccion = ? WHERE ClienteID = "+ClienteID+"", 
         [nombre, correo, direccion, id],
         (error, results) => {
             if(error)
