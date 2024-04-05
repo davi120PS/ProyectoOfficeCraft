@@ -8,7 +8,7 @@ const {connection} = require("../config/config.db");
 
 //Metodo para traer todos los pedidos de la tabla pedidos en bd
 const getPedido = (request,response) => {
-    connection.query("SELECT * FROM pedidos",
+    connection.query("SELECT p.PedidoID,p.FechaPedido,p.Estado,cl.Nombre FROM pedidos p INNER JOIN clientes cl WHERE p.ClienteID = cl.ClienteID",
     (error,results)=>{
         if(error)
         throw error;
