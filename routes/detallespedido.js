@@ -22,7 +22,7 @@ const postDetallespedido = (request, response) => {
     const {action,id,pedido,producto,cantidad,preciounitario,subtotal} = request.body;
     //console.log(action);return false;
     if(action == "insert"){
-        connection.query("INSERT INTO detallespedido (PedidoID, ProductoID, Cantidad, PrecioUnitario,Subtotal) VALUES (?,?,?,?,?)", 
+        connection.query("INSERT INTO detallespedido (PedidoID, ProductoID, Cantidad, Subtotal) VALUES (?,?,?,?,?)", 
         [pedido,producto,cantidad,preciounitario,subtotal],
         (error, results) => {
             if(error)
@@ -33,7 +33,7 @@ const postDetallespedido = (request, response) => {
 //*En caso de añadir un ID existente al agregar se actualiza el pedido seleccionado*/
     else{
         //console.log(action);return false;
-        connection.query("UPDATE productos SET PedidoID=?, ProductoID =?, Cantidad = ?, PrecioUnitario = ?,Subtotal = ? WHERE DetalleID = ?", 
+        connection.query("UPDATE productos SET PedidoID=?, ProductoID =?, Cantidad = ?, Subtotal = ? WHERE DetalleID = ?", 
         [pedido,producto,cantidad,preciounitario,subtotal,id],
         (error, results) => {
             if(error)
