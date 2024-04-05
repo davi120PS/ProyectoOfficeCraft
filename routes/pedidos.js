@@ -44,6 +44,18 @@ const postPedido = (request, response) => {
 };
 app.route("/pedidos").post(postPedido);
 
+const getPedidoId = (request,response) => {
+    const id = request.params.id;
+    connection.query("SELECT p.*, cl.Nombre, cl.ClienteID AS clienteid, p.FechaPedido AS fechapedido, p.Estado AS estado, FROM pedidos p LEFT JOIN clientes cl ON p.ClienteID = cl.ClienteID WHERE p.PedidoID = ?",
+    [id],
+    (error,results)=>{
+        if(error)
+            throw error;
+        response.status(200).json(results);
+    });
+};
+app.route("/pedidos/:id").get(getPedidoId);
+
 //Servicio para eliminar un cliente
 const delPedido = (request,response)=>{
     const id = request.params.id;
