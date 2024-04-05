@@ -9,11 +9,9 @@ const {connection}=require('../config/config.db');
 const getProductos = (request,response) => {
     connection.query("SELECT * FROM productos",
     (error,results)=>{
-        if(error){
-            console.error("Error al consultar la base de datos:", error);
-            response.status(500).json({ error: "Ocurrió un error al obtener los productos." });
-        }
-        response.status(201).json({"Lista de productos generada": results.affectedRows});
+        if(error)
+            throw error;
+        response.status(200).json(results);
     });
 };
 //ruta
@@ -54,7 +52,7 @@ const delProducto = (request,response)=>{
     [id],
     (error, results) => {
         if(error)
-        throw error;
+            throw error;
     response.status(201).json({"Producto eliminado":results.affectedRows});
     });
 };
