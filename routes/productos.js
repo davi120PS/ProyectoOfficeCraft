@@ -44,6 +44,20 @@ const postProducto = (request, response) => {
 };
 app.route("/productos").post(postProducto);
 
+//Encontrar ID para Editar productos/
+const getProductoId = (request,response) => {
+    const id = request.params.id;
+    connection.query("SELECT pr.*, pr.Nombre AS nombre, pr.Descripcion AS descripcion, pr.Precio AS precio, pr.Stock AS stock FROM productos pr WHERE pr.ProductoID = ?",
+    [id],
+    (error,results)=>{
+        if(error)
+            throw error;
+        response.status(200).json(results);
+    });
+};
+app.route("/productos/:id").get(getProductoId);
+
+
 //Servicio para eliminar un cliente
 const delProducto = (request,response)=>{
     const id = request.params.id;
