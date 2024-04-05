@@ -22,7 +22,7 @@ module.exports = app;
 
 /************Insertar o Actualizar productos*/
 const postProducto = (request, response) => {
-    const {action,id,nombre,descripcion,precio,stock} = request.body;
+    const {action,id,nombre,descripcion,precio,stock,ProductoID} = request.body;
     //console.log(action);return false;
     if(action == "insert"){
         connection.query("INSERT INTO productos (Nombre, Descripcion, Precio, Stock) VALUES (?,?,?,?)", 
@@ -34,7 +34,7 @@ const postProducto = (request, response) => {
                 response.status(201).json({"Producto añadido correctamente": results.affectedRows});
         });
     }else{
-        connection.query("UPDATE productos SET Nombre=?, Descripcion =?, Precio = ?, Stock = ? WHERE ProductoID = ?", 
+        connection.query("UPDATE productos SET Nombre=?, Descripcion =?, Precio = ?, Stock = ? WHERE ProductoID = "+ProductoID+"", 
         [nombre, descripcion,precio,stock,id],
         (error, results) => {
             if(error){
