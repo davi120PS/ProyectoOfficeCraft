@@ -46,7 +46,7 @@ app.route("/pedidos").post(postPedido);
 
 const getPedidoId = (request,response) => {
     const id = request.params.id;
-    connection.query("SELECT p.*, cl.Nombre, cl.ClienteID AS clienteid, p.FechaPedido AS fechapedido, p.Estado AS estado, FROM pedidos p LEFT JOIN clientes cl ON p.ClienteID = cl.ClienteID WHERE p.PedidoID = ?",
+    connection.query("SELECT p.*, cl.Nombre, cl.ClienteID AS cliente, p.FechaPedido AS fechapedido, p.Estado AS estado, FROM pedidos p LEFT JOIN clientes cl ON p.ClienteID = cl.ClienteID WHERE p.PedidoID = ?",
     [id],
     (error,results)=>{
         if(error)
