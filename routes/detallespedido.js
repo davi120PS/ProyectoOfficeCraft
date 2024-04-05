@@ -52,7 +52,7 @@ const delDetallespedido = (request,response)=>{
     [id],
     (error, results) => {
         if(error)
-        throw error;
+            throw error;
     response.status(201).json({"detalle pedido eliminado":results.affectedRows});
     });
 };

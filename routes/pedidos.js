@@ -11,7 +11,7 @@ const getPedido = (request,response) => {
     connection.query("SELECT * FROM pedidos",
     (error,results)=>{
         if(error)
-        throw error;
+            throw error;
     response.status(200).json(results);
     });
 };
