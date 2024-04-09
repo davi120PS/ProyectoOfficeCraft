@@ -22,8 +22,8 @@ const postDetallespedido = (request, response) => {
     const {action,id,pedido,producto,cantidad,preciounitario,subtotal} = request.body;
     //console.log(action);return false;
     if(action == "insert"){
-        connection.query("INSERT INTO detallespedido (PedidoID, ProductoID, Cantidad, PrecioUnitario,Subtotal) VALUES (?,?,?,?,?)", 
-        [pedido,producto,cantidad,preciounitario,subtotal],
+        connection.query("INSERT INTO detallespedido (PedidoID, ProductoID, Cantidad, Subtotal) VALUES (?,?,?,?)", 
+        [pedido,producto,cantidad,subtotal],
         (error, results) => {
             if(error)
                 throw error;
@@ -33,8 +33,8 @@ const postDetallespedido = (request, response) => {
 //*En caso de añadir un ID existente al agregar se actualiza el pedido seleccionado*/
     else{
         //console.log(action);return false;
-        connection.query("UPDATE productos SET PedidoID=?, ProductoID =?, Cantidad = ?, PrecioUnitario = ?,Subtotal = ? WHERE DetalleID = ?", 
-        [pedido,producto,cantidad,preciounitario,subtotal,id],
+        connection.query("UPDATE productos SET PedidoID=?, ProductoID =?, Cantidad = ?, Subtotal = ? WHERE DetalleID = ?", 
+        [pedido,producto,cantidad,subtotal,id],
         (error, results) => {
             if(error)
                 throw error;
@@ -43,6 +43,18 @@ const postDetallespedido = (request, response) => {
     }
 };
 app.route("/detallespedido").post(postDetallespedido);
+
+const getDetalleId = (request,response) => {
+    const id = request.params.id;
+    connection.query("SELECT p.*, cl.Nombre, cl.ClienteID AS cliente, p.FechaPedido AS fechapedido, p.Estado AS estado FROM detallespedido dp LEFT JOIN pedidos p ON dp.PedidoID = p.PedidoID WHERE dp.DetalleID = ?",
+    [id],
+    (error,results)=>{
+        if(error)
+            throw error;
+        response.status(200).json(results);
+    });
+};
+app.route("/detallespedido/:id").get(getDetalleId);
 
 //Servicio para eliminar un cliente
 const delDetallespedido = (request,response)=>{
