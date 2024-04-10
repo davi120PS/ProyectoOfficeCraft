@@ -7,7 +7,9 @@ dotenv.config();
 const {connection}=require('../config/config.db');
 
 const getDetallespedido = (request,response) => {
-    connection.query("SELECT * FROM detallespedido",
+    connection.query("SELECT dp.DetalleID, dp.PedidoID AS Pedido, pr.Nombre AS Producto, dp.Cantidad, dp.Subtotal FROM detallespedido AS dp"+
+                     " INNER JOIN pedidos p ON dp.PedidoID = p.PedidoID"+
+                     " INNER JOIN productos pr ON dp.ProductoID = pr.ProductoID",
     (error,results)=>{
         if(error)
             throw error;
@@ -19,7 +21,7 @@ app.route("/detallespedido").get(getDetallespedido);
 
 /*Metodo para crear o actualizar un cliente*/
 const postDetallespedido = (request, response) => {
-    const {action,id,pedido,producto,cantidad,preciounitario,subtotal} = request.body;
+    const {action,id,pedido,producto,cantidad,subtotal,DetalleID} = request.body;
     //console.log(action);return false;
     if(action == "insert"){
         connection.query("INSERT INTO detallespedido (PedidoID, ProductoID, Cantidad, Subtotal) VALUES (?,?,?,?)", 
@@ -33,7 +35,7 @@ const postDetallespedido = (request, response) => {
 //*En caso de añadir un ID existente al agregar se actualiza el pedido seleccionado*/
     else{
         //console.log(action);return false;
-        connection.query("UPDATE productos SET PedidoID=?, ProductoID =?, Cantidad = ?, Subtotal = ? WHERE DetalleID = ?", 
+        connection.query("UPDATE detallespedido SET PedidoID=?, ProductoID =?, Cantidad = ?, Subtotal = ? WHERE DetalleID = "+DetalleID+"", 
         [pedido,producto,cantidad,subtotal,id],
         (error, results) => {
             if(error)
@@ -46,7 +48,9 @@ app.route("/detallespedido").post(postDetallespedido);
 
 const getDetalleId = (request,response) => {
     const id = request.params.id;
-    connection.query("SELECT p.*, cl.Nombre, cl.ClienteID AS cliente, p.FechaPedido AS fechapedido, p.Estado AS estado FROM detallespedido dp LEFT JOIN pedidos p ON dp.PedidoID = p.PedidoID WHERE dp.DetalleID = ?",
+    connection.query("SELECT dp.*, p.PedidoID AS pedido, pr.Nombre, pr.ProductoID AS producto, dp.Cantidad AS cantidad, dp.Subtotal AS subtotal FROM detallespedido dp"+
+    " LEFT JOIN pedidos p ON dp.PedidoID = p.PedidoID"+
+    " LEFT JOIN productos pr ON dp.ProductoID = pr.ProductoID WHERE dp.DetalleID = ?",
     [id],
     (error,results)=>{
         if(error)
