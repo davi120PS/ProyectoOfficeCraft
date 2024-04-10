@@ -23,15 +23,41 @@ app.route("/detallespedido").get(getDetallespedido);
 const postDetallespedido = (request, response) => {
     const {action,id,pedido,producto,cantidad,subtotal,DetalleID} = request.body;
     //console.log(action);return false;
-    if(action == "insert"){
-        connection.query("INSERT INTO detallespedido (PedidoID, ProductoID, Cantidad, Subtotal) VALUES (?,?,?,?)", 
-        [pedido,producto,cantidad,subtotal],
-        (error, results) => {
-            if(error)
-                throw error;
-            response.status(201).json({"Detalle añadido correctamente": results.affectedRows});
+    if (action == "insert") {
+        connection.beginTransaction((err) => {
+            if (err) {
+                throw err;
+            }
+            // Insertar el detalle de pedido
+            connection.query("INSERT INTO detallespedido (PedidoID, ProductoID, Cantidad, Subtotal) VALUES (?,?,?,?)",
+                [pedido, producto, cantidad, subtotal],
+                (error, results) => {
+                    if (error) {
+                        return connection.rollback(() => {
+                            throw error;
+                        });
+                    }
+                    // Actualizar el stock del producto
+                    connection.query("UPDATE productos SET Stock = Stock - ? WHERE ProductoID = ?",
+                        [cantidad, producto],
+                        (err, results) => {
+                            if (err) {
+                                return connection.rollback(() => {
+                                    throw err;
+                                });
+                            }
+                            connection.commit((err) => {
+                                if (err) {
+                                    return connection.rollback(() => {
+                                        throw err;
+                                    });
+                                }
+                                response.status(201).json({ "Detalle añadido correctamente": results.affectedRows });
+                            });
+                        });
+                });
         });
-    }
+    } 
 //*En caso de añadir un ID existente al agregar se actualiza el pedido seleccionado*/
     else{
         //console.log(action);return false;

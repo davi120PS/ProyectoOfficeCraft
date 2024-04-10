@@ -26,7 +26,7 @@ const postPedido = (request, response) => {
     //console.log(action);return false;
     if(action === "insert"){
         connection.query("INSERT INTO pedidos (ClienteID, FechaPedido, Estado) VALUES (?,?,?)", 
-        [cliente, fecha,estado],
+        [cliente,fechapedido,estado],
         (error, results) => {
             if(error)
                 throw error;
